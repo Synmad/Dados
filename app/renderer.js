@@ -18,6 +18,7 @@ const resultDiv = document.getElementById("result");
 const resultBreakdownDiv = document.getElementById("result-breakdown");
 const recordedRolls = [];
 const saveButton = document.getElementById("save");
+const historyList = document.getElementById("history");
 
 updateDiceCounter();
 
@@ -61,15 +62,14 @@ function updateDiceCounter()
 function calculateRolls()
 {
     const results = []
-
     const diceSizes = selectedDice.map(die => 
         diceValues.find(newDie => newDie.id === die.id).sides);
-
     for(let i = 0; i < diceSizes.length; i++)
         results.push(Math.floor(Math.random() * diceSizes[i]) + 1);
-
-    resultBreakdownDiv.innerText = results.join(" + "); 
     const total = results.reduce((acc, result) => acc + result);
+
+    addToHistory(total, results);
+    resultBreakdownDiv.innerText = results.join(" + "); 
     resultDiv.innerText = total;
 }
 
@@ -83,8 +83,19 @@ function reset()
 rollButton.addEventListener("click", () => 
     { 
         calculateRolls();
-        reset(); 
+        reset();
     });
+
+function addToHistory(total, results)
+{
+    const newEntry = document.createElement("li");
+    historyList.insertBefore(newEntry, historyList.firstChild);
+    newEntry.innerText = `${total} (${results.join(" + ")})`
+    if(historyList.querySelectorAll("li").length > 10)
+    {
+        historyList.removeChild(historyList.lastChild);
+    }
+}
 
 saveButton.addEventListener("click", save)
 function save()
