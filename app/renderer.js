@@ -10,6 +10,8 @@ const diceValues =
 ];
 const diceButtons = document.querySelectorAll(".die");
 const selectedDice = [];
+const results = [];
+let total = 0;
 const diceCounter = []; 
 const diceCounterDiv = document.getElementById("dice-counter");
 const rollButton = document.getElementById("roll");
@@ -19,17 +21,15 @@ const resultBreakdownDiv = document.getElementById("result-breakdown");
 const recordedRolls = [];
 const saveButton = document.getElementById("save");
 const historyList = document.getElementById("history");
+const savedSection = document.getElementById("saved-section");
+let descriptions;
 
 updateDiceCounter();
 
 diceButtons.forEach(button => 
     {
-        button.addEventListener("click", (e) =>
-        {
-            selectedDice.push(diceValues.find(die => die.id === e.target.id));
-            updateDiceCounter();
-        })
-    })
+        button.addEventListener("click", (e) => selectDice(e))
+    });
 
 function updateDiceCounter()
 {
@@ -43,7 +43,7 @@ function updateDiceCounter()
                 return acc;
             }, {});
     
-            const descriptions = Object.entries(counts)
+            descriptions = Object.entries(counts)
                 .map(([id, count]) => 
                 {
                     const sides = diceValues.find(die => die.id === id).sides;
@@ -61,44 +61,71 @@ function updateDiceCounter()
 
 function calculateRolls()
 {
-    const results = []
     const diceSizes = selectedDice.map(die => 
         diceValues.find(newDie => newDie.id === die.id).sides);
     for(let i = 0; i < diceSizes.length; i++)
         results.push(Math.floor(Math.random() * diceSizes[i]) + 1);
-    const total = results.reduce((acc, result) => acc + result);
+    total = results.reduce((acc, result) => acc + result);
 
-    addToHistory(total, results);
     resultBreakdownDiv.innerText = results.join(" + "); 
     resultDiv.innerText = total;
 }
 
-resetButton.addEventListener("click", reset);
-function reset()
+resetButton.addEventListener("click", resetSelected);
+function resetSelected()
 {
     selectedDice.length = 0;
     updateDiceCounter();
 }
 
+function resetResults()
+{
+    results.length = 0;
+}
+
 rollButton.addEventListener("click", () => 
     { 
-        calculateRolls();
-        reset();
+        if(selectedDice.length !== 0)
+        {
+            addToHistory();
+            calculateRolls();
+        }
     });
 
-function addToHistory(total, results)
+function addToHistory()
 {
-    const newEntry = document.createElement("li");
-    historyList.insertBefore(newEntry, historyList.firstChild);
-    newEntry.innerText = `${total} (${results.join(" + ")})`
-    if(historyList.querySelectorAll("li").length > 10)
+    if(results.length !== 0)
     {
-        historyList.removeChild(historyList.lastChild);
+        const newEntry = document.createElement("li");
+        historyList.insertBefore(newEntry, historyList.firstChild);
+        newEntry.innerText = `${total} (${results.join(" + ")})`
+        resetResults();
+        if(historyList.querySelectorAll("li").length > 10)
+        {
+            historyList.removeChild(historyList.lastChild);
+        }
     }
+}
+
+function selectDice(event)
+{
+    selectedDice.push(diceValues.find(die => die.id === event.target.id));
+    console.log(selectedDice);
+    updateDiceCounter();
 }
 
 saveButton.addEventListener("click", save)
 function save()
 {
-
+    const newSavedRollId = descriptions.join(" + ");
+    savedSection.querySelectorAll("button").forEach((existingButton) => 
+    {
+        if(existingButton.getAttribute("id") === newSavedRollId)
+            existingButton.remove();
+    })
+    const newSavedRoll = document.createElement("button");
+    newSavedRoll.setAttribute("id", newSavedRollId)
+    newSavedRoll.innerText = newSavedRollId;
+    newSavedRoll.addEventListener("click", (e) => selectDice(e));
+    savedSection.appendChild(newSavedRoll);
 }
