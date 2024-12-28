@@ -28,7 +28,12 @@ updateDiceCounter();
 
 diceButtons.forEach(button => 
     {
-        button.addEventListener("click", (e) => selectDice(e))
+        button.addEventListener("click", (e) => selectDice(e));
+        button.addEventListener("contextmenu", (e) => 
+            {
+                removeDice(e);
+                e.preventDefault();
+            });
     });
 
 function updateDiceCounter()
@@ -57,6 +62,7 @@ function updateDiceCounter()
             
             diceCounterDiv.innerText = `Estás por tirar ${descriptions.join(", ").replace(/, ([^,]*)$/, ' y $1')}.`;
         }
+    console.log(selectedDice);
 }
 
 function calculateRolls()
@@ -110,12 +116,19 @@ function addToHistory()
 function selectDice(event)
 {
     selectedDice.push(diceValues.find(die => die.id === event.target.id));
-    console.log(selectedDice);
     updateDiceCounter();
 }
 
-saveButton.addEventListener("click", save)
-function save()
+function removeDice(event)
+{
+    const index = selectedDice.indexOf(event.target.id);
+    if(index)
+        selectedDice.splice(index, 1);
+    updateDiceCounter();
+}
+
+saveButton.addEventListener("click", saveRoll)
+function saveRoll()
 {
     const newSavedRollId = descriptions.join(" + ");
     savedSection.querySelectorAll("button").forEach((existingButton) => 
@@ -127,5 +140,15 @@ function save()
     newSavedRoll.setAttribute("id", newSavedRollId)
     newSavedRoll.innerText = newSavedRollId;
     newSavedRoll.addEventListener("click", (e) => selectDice(e));
+    newSavedRoll.addEventListener("contextmenu", (e) =>
+        {
+            removeSavedRoll(e);
+            e.preventDefault();
+        });
     savedSection.appendChild(newSavedRoll);
+}
+
+function removeSavedRoll(event)
+{
+    event.target.remove();
 }
