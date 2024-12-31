@@ -9,7 +9,7 @@ const diceValues =
     { id: "d4", sides: 4 }
 ];
 const diceButtons = document.querySelectorAll(".die");
-const selectedDice = [];
+let selectedDice = [];
 const results = [];
 let total = 0;
 const diceCounter = []; 
@@ -22,11 +22,14 @@ const recordedRolls = [];
 const saveButton = document.getElementById("save");
 const historyList = document.getElementById("history");
 const savedSection = document.getElementById("saved-section");
-let descriptions;
+let countsString;
 const modifierInput = document.getElementById("modifier");
 let breakdownText = "";
 let modifierText;
 let modifierDescription;
+let countsArray = [];
+let modifierValue;
+
 
 updateDiceCounter();
 
@@ -36,25 +39,27 @@ function updateDiceCounter()
             diceCounterDiv.innerText = "No estás por tirar ningún dado.";
         else 
             {
-                const counts = selectedDice.reduce((acc, die) => 
+                const countsObjects = selectedDice.reduce((acc, die) => 
                 {
                     acc[die.id] = (acc[die.id] || 0) + 1;
                     return acc;
                 }, {});
-        
-                descriptions = Object.entries(counts)
-                    .map(([id, count]) => 
-                    {
-                        const sides = diceValues.find(die => die.id === id).sides;
-                        return {id, count, sides};
-                    })
+
+                countsArray =  Object.entries(countsObjects)
+                .map(([id, count]) => 
+                {
+                    const sides = diceValues.find(die => die.id === id).sides;
+                    return {id, count, sides};
+                })
+
+                countsString = countsArray
                     .sort((a, b) => b.sides - a.sides)
                     .map(({count, id}) =>
                     {
                         return `${count}d${id.slice(1)}`
                     })
                 
-                const descriptionText = descriptions.join(", ").replace(/, ([^,]*)$/, ' y $1')
+                const descriptionText = countsString.join(", ").replace(/, ([^,]*)$/, ' y $1')
     
                 modifierDescription = "";
                 if(modifierInput.value > 0)
@@ -70,6 +75,7 @@ function updateDiceCounter()
 modifierInput.addEventListener("input", (e) => 
     {
         modifierInput.value = modifierInput.value.replace(/[^*/\-+0-9]/g, '');
+        modifierValue = Number(modifierInput.value);
         updateDiceCounter();
         if(e.target.value.indexOf("++") !== -1 || e.target.value.indexOf("--") !== -1)
             e.target.value = e.target.value.slice(0, -1);
@@ -85,17 +91,41 @@ diceButtons.forEach(button =>
             });
     });
 
-function selectDice(event)
-{
-    selectedDice.push(diceValues.find(die => die.id === event.target.id));
-    console.log(event.target.id);
-    if(event.target.getAttribute("data-modifier") !== undefined)
+    function selectDice(event, count = 1)
     {
-        modifierInput.value = event.target.getAttribute("data-modifier");
-    }
+        const rollData = JSON.parse(event.target.getAttribute("data-roll")) || null;
 
-    updateDiceCounter();
-}
+        if(rollData !== null)
+        {
+            const { countsArray, modifierValue } = rollData;
+            selectedDice = [];
+            countsArray.forEach(({id, count}) => 
+                {
+                    const die = diceValues.find(die => die.id === id);
+                    for (let i = 0; i < count; i++)
+                        selectedDice.push(die);
+                });
+            
+            
+            if(modifierValue !== undefined)
+                modifierInput.value = modifierValue;
+    
+            console.log("Selected Dice:", selectedDice);
+            console.log("Modifier Value:", modifierValue);
+        }
+        else
+        {
+
+            selectedDice.push(diceValues.find(die => die.id === event.target.id));
+            console.log(event.target.id);
+            if(event.target.getAttribute("data-modifier") !== undefined)
+            {
+                modifierInput.value = event.target.getAttribute("data-modifier");
+            }
+        }
+        
+        updateDiceCounter();
+    }
 
 rollButton.addEventListener("click", () => 
     { 
@@ -129,36 +159,33 @@ function calculateRolls()
 saveButton.addEventListener("click", saveRoll)
 function saveRoll()
 {
-    const modifierValue = Number(modifierInput.value);
-
-    if (modifierValue > 0)
+    let modifierText = "";
+    if (modifierValue > 0) {
         modifierText = ` + ${modifierValue}`;
-    else if (modifierValue < 0)
+    } else if (modifierValue < 0) {
         modifierText = ` - ${Math.abs(modifierValue)}`;
-    else
-    modifierText = "";
-    const rollData = JSON.stringify
-        ({
-            dice: selectedDice.map(die => die.id),
-            modifier: modifierValue
-        });
-    
-    const displayName = descriptions.join(" + ") + modifierText;
+    }
 
-    // savedSection.querySelectorAll("button").forEach((existingButton) => 
-    // {
-    //     if(existingButton.getAttribute("id") === diceRoll)
-    //         existingButton.remove();
-    // })
+    const displayName = countsString.join(" + ") + modifierText;
+
+    const rollData = JSON.stringify({ countsArray, modifierValue });
+
+
     const newSavedRoll = document.createElement("button");
-    newSavedRoll.setAttribute("data-roll", rollData);
+    newSavedRoll.setAttribute("data-roll", rollData); 
     newSavedRoll.innerText = displayName;
+
     newSavedRoll.addEventListener("click", (e) => selectDice(e));
-    newSavedRoll.addEventListener("contextmenu", (e) =>
+    newSavedRoll.addEventListener("contextmenu", (e) => {
+        removeSavedRoll(e);
+        e.preventDefault();
+    });
+    console.log(newSavedRoll.getAttribute("data-roll"))
+    savedSection.querySelectorAll("button").forEach((existingButton) => 
         {
-            removeSavedRoll(e);
-            e.preventDefault();
-        });
+            if(existingButton.getAttribute("data-roll") === newSavedRoll.getAttribute("data-roll"))
+                existingButton.remove();
+        })
     savedSection.appendChild(newSavedRoll);
 }
 
