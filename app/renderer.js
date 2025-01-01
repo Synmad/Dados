@@ -29,7 +29,7 @@ let modifierText;
 let modifierDescription;
 let countsArray = [];
 let modifierValue;
-
+const trayDice = document.querySelectorAll(".tray-die-image")
 
 updateDiceCounter();
 
@@ -71,6 +71,12 @@ function updateDiceCounter()
             }
         console.log(selectedDice);
 }
+
+trayDice.forEach(button => 
+{
+    button.addEventListener("animationend", (e) => e.target.classList.remove("rotate"));
+}
+);
 
 modifierInput.addEventListener("input", (e) => 
     {
@@ -133,6 +139,7 @@ rollButton.addEventListener("click", () =>
         {
             addToHistory();
             calculateRolls();
+            trayDice[0].classList.add("rotate");
         }
     });
 

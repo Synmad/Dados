@@ -1,0 +1,81 @@
+* :not(script)
+{
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#dice-buttons, #actions
+{
+    flex-direction: row;
+}
+
+#modifier
+{
+    max-width: 60px;
+}
+
+@keyframes rotate360
+{
+    from {transform: rotate(0);}
+    to {transform: rotate(360deg);}
+}
+
+#tray
+{
+    background-color: grey;
+    height: 20%;
+    max-height: 300px;
+}
+
+.tray-die-button
+{
+    background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	outline: inherit;
+    cursor: pointer;
+}
+
+.tray-die-image
+{
+    width: 50%;
+}
+
+.rotate
+{
+    animation: rotate360 0.4s ease-out 0s 1 normal none;
+}
+
+#dice-buttons
+{
+    background-color: grey;
+    width: 50%;
+    max-width: 400px;
+    min-height: 40px;
+    height: 9%;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.die 
+{
+    aspect-ratio: 1 / 1;
+    flex-direction: row;
+    justify-content: center;
+
+}
+.die-button-icon
+{
+    width: 50%;
+}
+
+
+.die-button-text
+{
+    font-size: 1 rem;
+}

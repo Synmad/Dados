@@ -6,22 +6,32 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="styles.css">
     </head>
     <body>
         <h1>Dados</h1>
+        <div id="tray">
+            <button class="tray-die-button"><img class="tray-die-image" src="../assets/dice-d20.png" alt=""></button>
+            
+        </div>
         <div id="result">Seleccioná tus dados usando los botones de abajo.<br> Cuando estés listo, seleccioná "Tirar".</div>
         <div id="result-breakdown"></div>
         <hr>
         <div id="dice-counter"></div>
-        <section id="dice">
-            <button id="d100" class="die">d100</button>
+        <section id="dice-buttons">
+            <button id="d100" class="die">
+                    
+                d100
+            </button>
             <button id="d20" class="die">d20</button>
             <button id="d12" class="die">d12</button>
             <button id="d10" class="die">d10</button>
             <button id="d8" class="die">d8</button>
             <button id="d6" class="die">d6</button>
-            <button id="d4" class="die">d4</button> 
+            <button id="d4" class="die">
+                <img class="die-button-icon" src="../assets/dice-d4.png">
+                <span class="die-button-text">d4</span> 
+            </button> 
             <input type="text" autocomplete="off" id="modifier">
         </section>
         <section id="actions">
