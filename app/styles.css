@@ -1,0 +1,51 @@
+body 
+{
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes rotate360
+{
+    from { transform: rotate(0); }
+    to { transform: rotate(360deg); }
+}
+
+.rotate
+{
+    animation: rotate360 0.4s ease-out 0s 1 normal none;
+}
+
+#tray 
+{
+    background-color: brown;
+    display: grid; 
+    min-height: 250px;
+    max-height: 250px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    overflow: hidden;
+    gap: 0.2em;
+}
+
+.tray-die-button
+{
+    aspect-ratio: 1 / 1; /* Ensure square shape */
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    max-width: 250px; /* Prevent the button from exceeding its cell size */
+    width: 100%; /* Allow it to fill the grid cell width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.tray-die-image
+{
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+}
+
+.tray-die-button > span
+{
+    color: orange;
+    font-size: 1.5rem;
+    position: absolute;
+}

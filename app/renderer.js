@@ -29,6 +29,7 @@ let modifierText;
 let modifierDescription;
 let countsArray = [];
 let modifierValue;
+const diceTray = document.getElementById("tray");
 
 
 updateDiceCounter();
@@ -69,7 +70,6 @@ function updateDiceCounter()
     
                 diceCounterDiv.innerText = `Estás por tirar ${descriptionText}${modifierDescription}.`;
             }
-        console.log(selectedDice);
 }
 
 modifierInput.addEventListener("input", (e) => 
@@ -83,10 +83,14 @@ modifierInput.addEventListener("input", (e) =>
     
 diceButtons.forEach(button => 
     {
-        button.addEventListener("click", (e) => selectDice(e));
+        button.addEventListener("click", (e) => 
+            {
+                selectDice(e)
+                addDiceToTray(e);
+            });
         button.addEventListener("contextmenu", (e) => 
             {
-                removeDice(e);
+                removeSelectedDice(e);
                 e.preventDefault();
             });
     });
@@ -109,21 +113,16 @@ diceButtons.forEach(button =>
             
             if(modifierValue !== undefined)
                 modifierInput.value = modifierValue;
-    
-            console.log("Selected Dice:", selectedDice);
-            console.log("Modifier Value:", modifierValue);
         }
         else
         {
-
             selectedDice.push(diceValues.find(die => die.id === event.target.id));
-            console.log(event.target.id);
             if(event.target.getAttribute("data-modifier") !== undefined)
             {
                 modifierInput.value = event.target.getAttribute("data-modifier");
             }
         }
-        
+        console.log(selectedDice);
         updateDiceCounter();
     }
 
@@ -138,10 +137,10 @@ rollButton.addEventListener("click", () =>
 
 function calculateRolls()
 {
-    const diceSizes = selectedDice.map(die => 
+    const selectedDiceSizes = selectedDice.map(die => 
         diceValues.find(newDie => newDie.id === die.id).sides);
-    for(let i = 0; i < diceSizes.length; i++)
-        results.push(Math.floor(Math.random() * diceSizes[i]) + 1);
+    for(let i = 0; i < selectedDiceSizes.length; i++)
+        results.push(Math.floor(Math.random() * selectedDiceSizes[i]) + 1);
     total = (results.reduce((acc, result) => acc + result) + Number(modifierInput.value));
 
     if (Number(modifierInput.value) > 0)
@@ -189,6 +188,45 @@ function saveRoll()
     savedSection.appendChild(newSavedRoll);
 }
 
+function addDiceToTray(event)
+{
+    const rollData = JSON.parse(event.target.getAttribute("data-roll")) || null;
+
+    if(rollData !== null)
+    {
+        const countsArray = rollData;
+        countsArray.forEach(({id, count}) => 
+            {
+                const die = diceValues.find(die => die.id === id);
+                for (let i = 0; i < count; i++)
+                    initializeTrayDie(die.id)
+            });
+    }
+    else
+        initializeTrayDie(event.target.id);
+}
+
+function initializeTrayDie(id)
+{
+    const newButton = document.createElement("button");
+    const newDieImage = document.createElement("img");
+    const newDieText = document.createElement("span");
+
+    newButton.classList.add("tray-die-button");
+    newButton.addEventListener("contextmenu", (e) => 
+        {
+            removeTrayDice(e);
+            e.preventDefault();
+        });
+    newDieImage.src = `../assets/${id}.png`;
+    newDieImage.classList.add("tray-die-image");
+    newDieText.innerText = "x";
+
+    diceTray.insertBefore(newButton, diceTray.firstChild);
+    newButton.appendChild(newDieImage);
+    newButton.appendChild(newDieText);
+}
+
 //#region Secondary functions 
 
 function removeSavedRoll(event)
@@ -201,6 +239,7 @@ function resetRoll()
 {
     selectedDice.length = 0;
     modifierInput.value = "";
+    diceTray.innerHTML = "";
     updateDiceCounter();
 }
 
@@ -209,14 +248,21 @@ function resetResults()
     results.length = 0;
 }
 
-function removeDice(event)
+function removeSelectedDice(event)
 {
     const index = selectedDice.indexOf(event.target.id);
     if(index)
+    {
         selectedDice.splice(index, 1);
+    }
     updateDiceCounter();
 }
 
+function removeTrayDice(event)
+{
+    removeSelectedDice(event);
+    event.currentTarget.remove();
+}
 
 function addToHistory()
 {
