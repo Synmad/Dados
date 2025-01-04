@@ -11,7 +11,7 @@ const diceValues =
 const diceButtons = document.querySelectorAll(".die");
 let selectedDice = [];
 const results = [];
-let total = 0;
+let finalTotal = 0;
 const diceCounter = []; 
 const diceCounterDiv = document.getElementById("dice-counter");
 const rollButton = document.getElementById("roll");
@@ -29,7 +29,9 @@ let modifierText;
 let modifierDescription;
 let countsArray = [];
 let modifierValue;
-const trayDice = document.querySelectorAll(".tray-die-image")
+const diceTray = document.getElementById("tray");
+const selectedTrayDice = []; 
+
 
 updateDiceCounter();
 
@@ -69,7 +71,6 @@ function updateDiceCounter()
     
                 diceCounterDiv.innerText = `Estás por tirar ${descriptionText}${modifierDescription}.`;
             }
-        console.log(selectedDice);
 }
 
 trayDice.forEach(button => 
@@ -89,10 +90,14 @@ modifierInput.addEventListener("input", (e) =>
     
 diceButtons.forEach(button => 
     {
-        button.addEventListener("click", (e) => selectDice(e));
+        button.addEventListener("click", (e) => 
+            {
+                selectDice(e)
+                addDiceToTray(e);
+            });
         button.addEventListener("contextmenu", (e) => 
             {
-                removeDice(e);
+                removeSelectedDice(e);
                 e.preventDefault();
             });
     });
@@ -115,21 +120,16 @@ diceButtons.forEach(button =>
             
             if(modifierValue !== undefined)
                 modifierInput.value = modifierValue;
-    
-            console.log("Selected Dice:", selectedDice);
-            console.log("Modifier Value:", modifierValue);
         }
         else
         {
-
             selectedDice.push(diceValues.find(die => die.id === event.target.id));
-            console.log(event.target.id);
             if(event.target.getAttribute("data-modifier") !== undefined)
             {
                 modifierInput.value = event.target.getAttribute("data-modifier");
             }
         }
-        
+        console.log(selectedDice);
         updateDiceCounter();
     }
 
@@ -137,30 +137,40 @@ rollButton.addEventListener("click", () =>
     { 
         if(selectedDice.length !== 0)
         {
-            addToHistory();
-            calculateRolls();
-            trayDice[0].classList.add("rotate");
+            rollAllDice();
         }
     });
 
-function calculateRolls()
+function calculateTotal()
 {
-    const diceSizes = selectedDice.map(die => 
-        diceValues.find(newDie => newDie.id === die.id).sides);
-    for(let i = 0; i < diceSizes.length; i++)
-        results.push(Math.floor(Math.random() * diceSizes[i]) + 1);
-    total = (results.reduce((acc, result) => acc + result) + Number(modifierInput.value));
-
+    results.length = 0;
     if (Number(modifierInput.value) > 0)
+    {
         modifierText = ` + ${modifierInput.value}`;
+        resultBreakdownDiv.classList.remove("hidden");
+    }
     else if (Number(modifierInput.value) < 0)
+    {
         modifierText = ` - ${modifierInput.value.slice(1)}`;
+        resultBreakdownDiv.classList.remove("hidden");
+    }
     else
-    modifierText = "";  
+    {
+        modifierText = "";  
+        resultBreakdownDiv.classList.add("hidden");
+    }
 
-    breakdownText = results.join(" + ") + modifierText;
+    const trayDice = document.querySelectorAll(".tray-die-button");
+    trayDice.forEach(die => {
+        results.push(Number(die.getAttribute("result")));
+    });
+    console.log(results);
+    const diceTotal = results.length !== 0 ? results.reduce((acc, result) => acc + result) : 0;
+    finalTotal = diceTotal + Number(modifierInput.value);
+    resultDiv.innerText = finalTotal;
+    breakdownText = diceTotal + modifierText;
     resultBreakdownDiv.innerText = breakdownText;
-    resultDiv.innerText = total;
+    addToHistory();
 }
 
 saveButton.addEventListener("click", saveRoll)
@@ -196,6 +206,75 @@ function saveRoll()
     savedSection.appendChild(newSavedRoll);
 }
 
+function addDiceToTray(event)
+{
+    const rollData = JSON.parse(event.target.getAttribute("data-roll")) || null;
+
+    if(rollData !== null)
+    {
+        const countsArray = rollData;
+        countsArray.forEach(({id, count}) => 
+            {
+                const die = diceValues.find(die => die.id === id);
+                for (let i = 0; i < count; i++)
+                    initializeTrayDie(die.id)
+            });
+    }
+    else
+        initializeTrayDie(event.target.id);
+}
+
+function initializeTrayDie(id)
+{
+    const newButton = document.createElement("button");
+    const newDieImage = document.createElement("img");
+    const newDieText = document.createElement("span");
+
+    newButton.classList.add("tray-die-button");
+    newButton.addEventListener("click", (e) => 
+    {
+        rollDie(e);
+        calculateTotal();
+    })
+    newButton.addEventListener("contextmenu", (e) => 
+    {
+        removeTrayDice(e);
+        e.preventDefault();
+    });
+    newButton.addEventListener("animationend", (e) =>
+    {
+        newButton.classList.remove("rotate");
+    })
+    newButton.id = id;
+    
+    newDieImage.src = `../assets/${id}.png`;
+    newDieImage.classList.add("tray-die-image");
+    newDieText.innerText = "x";
+
+    diceTray.insertBefore(newButton, diceTray.firstChild);
+    newButton.appendChild(newDieImage);
+    newButton.appendChild(newDieText);
+
+    rollDie(newButton);
+    calculateTotal();
+}
+
+function rollDie(eventOrElement)
+{
+    const target = eventOrElement instanceof Event ? eventOrElement.currentTarget : eventOrElement; 
+    target.classList.add("rotate");
+    const result = Math.floor(Math.random() * target.id.slice(1)) + 1;
+    target.querySelector("span").innerText = result;
+    target.setAttribute("result", result);
+}
+
+function rollAllDice()
+{
+    const trayDice = document.querySelectorAll(".tray-die-button");
+    trayDice.forEach(button => rollDie(button));
+    calculateTotal();
+}
+
 //#region Secondary functions 
 
 function removeSavedRoll(event)
@@ -208,22 +287,26 @@ function resetRoll()
 {
     selectedDice.length = 0;
     modifierInput.value = "";
+    diceTray.innerHTML = "";
     updateDiceCounter();
 }
 
-function resetResults()
-{
-    results.length = 0;
-}
-
-function removeDice(event)
+function removeSelectedDice(event)
 {
     const index = selectedDice.indexOf(event.target.id);
     if(index)
+    {
         selectedDice.splice(index, 1);
+    }
     updateDiceCounter();
 }
 
+function removeTrayDice(event)
+{
+    removeSelectedDice(event);
+    event.currentTarget.remove();
+    calculateTotal();
+}
 
 function addToHistory()
 {
@@ -231,8 +314,7 @@ function addToHistory()
     {
         const newEntry = document.createElement("li");
         historyList.insertBefore(newEntry, historyList.firstChild);
-        newEntry.innerText = `${total} (${breakdownText})`
-        resetResults();
+        newEntry.innerText = `${finalTotal} ${Number(breakdownText) === finalTotal ? "" : `(${breakdownText})`}`;
         if(historyList.querySelectorAll("li").length > 10)
         {
             historyList.removeChild(historyList.lastChild);
