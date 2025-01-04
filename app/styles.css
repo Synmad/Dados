@@ -48,4 +48,10 @@ body
     color: orange;
     font-size: 1.5rem;
     position: absolute;
+    background-color: transparent;
+}
+
+.hidden
+{
+    visibility: hidden;
 }
