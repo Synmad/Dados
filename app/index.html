@@ -9,7 +9,6 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <h1>Dados</h1>
         <div id="tray">
         </div>
         <div id="result">Seleccioná tus dados usando los botones de abajo.<br> Cuando estés listo, seleccioná "Tirar".</div>
@@ -30,18 +29,31 @@
             <button id="roll">Tirar</button>
             <button id="reset">Reiniciar tirada</button>
             <button id="save">Guardar tirada</button>
+            <button id="toggle-history">Alternar visibilidad del historial</button>
         </section>
         <hr>
         <section id="saved-section">
             <h2>Tiradas guardadas</h2>
         </section>
         <hr>
-        <section>
+        <section id="history-section">
             <h2>Historial</h2>
-            <ul id="history">
+            <ul id="history-list">
 
             </ul>
         </section>
         <script src="renderer.js"></script>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="d10svg" viewBox="0 0 100 100">
+                <g clip-path="url(#clip0_1_3)">
+                    <path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M100.023 41.5036L50.0008 4.00363L-0.0215607 41.5036H-0.0016346V58.4964H-0.023262L49.9984 95.9964L100.02 58.4964H99.9984V41.5036H100.023Z" fill="#282828"/>
+                </g>
+                <defs>
+                <clipPath id="clip0_1_3">
+                    <rect width="100" height="100" fill="#282828"/>
+                </clipPath>
+                </defs>  
+            </symbol>
+        </svg>
     </body>
 </html>

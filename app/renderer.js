@@ -20,7 +20,7 @@ const resultDiv = document.getElementById("result");
 const resultBreakdownDiv = document.getElementById("result-breakdown");
 const recordedRolls = [];
 const saveButton = document.getElementById("save");
-const historyList = document.getElementById("history");
+const historyList = document.getElementById("history-list");
 const savedSection = document.getElementById("saved-section");
 let countsString;
 const modifierInput = document.getElementById("modifier");
@@ -31,7 +31,8 @@ let countsArray = [];
 let modifierValue;
 const diceTray = document.getElementById("tray");
 const selectedTrayDice = []; 
-
+const toggleHistoryButton = document.getElementById("toggle-history");
+const historySection = document.getElementById("history-section");
 
 updateDiceCounter();
 
@@ -86,8 +87,13 @@ diceButtons.forEach(button =>
     {
         button.addEventListener("click", (e) => 
             {
-                selectDice(e)
-                addDiceToTray(e);
+                if(selectedDice.length <= 35)
+                {
+                    selectDice(e)
+                    addDiceToTray(e);
+                }
+                else 
+                    alert("Has seleccionado la cantidad máxima de dados.")
             });
         button.addEventListener("contextmenu", (e) => 
             {
@@ -221,9 +227,6 @@ function addDiceToTray(event)
 function initializeTrayDie(id)
 {
     const newButton = document.createElement("button");
-    const newDieImage = document.createElement("img");
-    const newDieText = document.createElement("span");
-
     newButton.classList.add("tray-die-button");
     newButton.addEventListener("click", (e) => 
     {
@@ -240,9 +243,15 @@ function initializeTrayDie(id)
         newButton.classList.remove("rotate");
     })
     newButton.id = id;
-    
-    newDieImage.src = `../assets/${id}.png`;
-    newDieImage.classList.add("tray-die-image");
+
+    const newDieImage = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    newDieImage.setAttribute("width", "100");
+    newDieImage.setAttribute("height", "100");
+    const svgSymbol = document.createElementNS("http://www.w3.org/2000/svg", "use");
+    svgSymbol.setAttribute("href", `#d10svg`);
+    newDieImage.appendChild(svgSymbol);
+
+    const newDieText = document.createElement("span");
     newDieText.innerText = "x";
 
     diceTray.insertBefore(newButton, diceTray.firstChild);
@@ -283,11 +292,13 @@ function resetRoll()
     modifierInput.value = "";
     diceTray.innerHTML = "";
     updateDiceCounter();
+    calculateTotal();
 }
 
-function removeSelectedDice(event)
+function removeSelectedDice(eventOrElement)
 {
-    const index = selectedDice.indexOf(event.target.id);
+    const target = eventOrElement instanceof Event ? eventOrElement.currentTarget : eventOrElement; 
+    const index = selectedDice.indexOf(target.id);
     if(index)
     {
         selectedDice.splice(index, 1);
@@ -315,4 +326,7 @@ function addToHistory()
         }
     }
 }
+
+toggleHistoryButton.addEventListener("click", () => historySection.classList.toggle("hidden"));
+
 //#endregion
