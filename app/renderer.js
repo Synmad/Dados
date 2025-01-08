@@ -20,7 +20,7 @@ const resultDiv = document.getElementById("result");
 const resultBreakdownDiv = document.getElementById("result-breakdown");
 const recordedRolls = [];
 const saveButton = document.getElementById("save");
-const historyList = document.getElementById("history");
+const historyList = document.getElementById("history-list");
 const savedSection = document.getElementById("saved-section");
 let countsString;
 const modifierInput = document.getElementById("modifier");
@@ -31,9 +31,19 @@ let countsArray = [];
 let modifierValue;
 const diceTray = document.getElementById("tray");
 const selectedTrayDice = []; 
-
+const toggleHistory = document.getElementById("toggle-history");
+const historySection = document.getElementById("history-section");
 
 updateDiceCounter();
+updateHistoryVisibility();
+
+function updateHistoryVisibility()
+{
+    if(localStorage.getItem("hideHistory") === "true")
+        historySection.classList.add("hidden");
+    else
+        historySection.classList.remove("hidden");
+}
 
 function updateDiceCounter()
     {
@@ -315,4 +325,14 @@ function addToHistory()
         }
     }
 }
+
+toggleHistory.addEventListener("click", () => 
+{
+    if(localStorage.getItem("hideHistory") === "false")
+        localStorage.setItem("hideHistory", "true");
+    else if(localStorage.getItem("hideHistory") === "true")
+        localStorage.setItem("hideHistory", "false");
+
+    updateHistoryVisibility();
+})
 //#endregion

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,10 +9,9 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <h1>Dados</h1>
         <div id="tray">
         </div>
-        <div id="result">Seleccioná tus dados usando los botones de abajo.<br> Cuando estés listo, seleccioná "Tirar".</div>
+        <div id="result">Seleccioná tus dados usando los botones de abajo. Cuando estés listo, seleccioná "Tirar".</div>
         <div id="result-breakdown"></div>
         <hr>
         <div id="dice-counter"></div>
@@ -30,18 +29,25 @@
             <button id="roll">Tirar</button>
             <button id="reset">Reiniciar tirada</button>
             <button id="save">Guardar tirada</button>
+            <button id="toggle-history">Cambiar visibilidad del historial</button>
         </section>
         <hr>
         <section id="saved-section">
             <h2>Tiradas guardadas</h2>
         </section>
         <hr>
-        <section>
+        <section id="history-section">
             <h2>Historial</h2>
-            <ul id="history">
+            <ul id="history-list">
 
             </ul>
         </section>
-        <script src="renderer.js"></script>
+        <fieldset>
+            <input type="radio" name="language" id="spanish" checked>
+            <label for="spanish">Español</label>
+            <input type="radio" name="language" id="english">
+            <label for="english">English</label>
+        </fieldset>
+        <script src="renderer.js" type="module"></script>
     </body>
 </html>
