@@ -28,13 +28,13 @@ body
 
 .tray-die-button
 {
-    aspect-ratio: 1 / 1; /* Ensure square shape */
+    aspect-ratio: 1 / 1; 
     display: flex;
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    max-width: 250px; /* Prevent the button from exceeding its cell size */
-    width: 100%; /* Allow it to fill the grid cell width */
-    height: auto; /* Maintain aspect ratio */
+    justify-content: center; 
+    align-items: center; 
+    max-width: 250px; 
+    width: 100%; 
+    height: auto; 
 }
 
 .tray-die-image
