@@ -1,4 +1,3 @@
-import * as diceTray from "./diceTray.js"
 import * as diceCounter from "./diceCounter.js"
 import * as calculations from "./calculations.js"
 import * as diceSelection from "./diceSelection.js"
@@ -15,7 +14,6 @@ export const diceValues =
     { id: "d4", sides: 4 }
 ];
 const DICE_BUTTONS = document.querySelectorAll(".die");
-export const diceCounterDiv = document.getElementById("dice-counter");
 const ROLL_BUTTON = document.getElementById("roll");
 const RESET_BUTTON = document.getElementById("reset");
 export const MODIFIER_INPUT = document.getElementById("modifier");
@@ -24,6 +22,7 @@ export const diceTrayDiv = document.getElementById("tray");
 const SAVE_BUTTON = document.getElementById("save");
 
 diceCounter.updateDiceCounter();
+savedRolls.loadSavedRolls();
 
 SAVE_BUTTON.addEventListener("click", (e) => 
 {

@@ -1,6 +1,7 @@
 import * as renderer from "./renderer.js"
 import * as diceSelection from "./diceSelection.js"
 
+export const diceCounterDiv = document.getElementById("dice-counter");
 export let countsArray = [];
 export let countsString;
 let modifierDescription;
@@ -13,7 +14,7 @@ export function updateCountsArray(newCountsArray)
 export function updateDiceCounter()
     {
         if(diceSelection.selectedDice.length===0)
-            renderer.diceCounterDiv.innerText = "No estás por tirar ningún dado.";
+            diceCounterDiv.innerText = "No estás por tirar ningún dado.";
         else 
             {
                 const countsObjects = diceSelection.selectedDice.reduce((acc, die) => 
@@ -44,6 +45,6 @@ export function updateDiceCounter()
                 if(renderer.modifierValue < 0)
                     modifierDescription = `, restando ${renderer.modifierValue.slice(1)}`;
     
-                renderer.diceCounterDiv.innerText = `Estás por tirar ${descriptionText}${modifierDescription}.`;
+                diceCounterDiv.innerText = `Estás por tirar ${descriptionText}${modifierDescription}.`;
             }
 }
