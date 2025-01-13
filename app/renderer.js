@@ -2,6 +2,7 @@ import * as diceCounter from "./diceCounter.js"
 import * as calculations from "./calculations.js"
 import * as diceSelection from "./diceSelection.js"
 import * as savedRolls from "./savedRolls.js"
+import * as languages from "./languages.js"
 
 export const diceValues = 
 [
@@ -14,15 +15,21 @@ export const diceValues =
     { id: "d4", sides: 4 }
 ];
 const DICE_BUTTONS = document.querySelectorAll(".die");
-const ROLL_BUTTON = document.getElementById("roll");
-const RESET_BUTTON = document.getElementById("reset");
+const ROLL_BUTTON = document.getElementById("roll-button");
+const RESET_BUTTON = document.getElementById("reset-button");
 export const MODIFIER_INPUT = document.getElementById("modifier");
 export let modifierValue;
 export const diceTrayDiv = document.getElementById("tray");
-const SAVE_BUTTON = document.getElementById("save");
+const SAVE_BUTTON = document.getElementById("save-button");
+const LANGUAGE_SELECT = document.getElementById("language-select");
 
-diceCounter.updateDiceCounter();
-savedRolls.loadSavedRolls();
+document.addEventListener("DOMContentLoaded", () =>
+{
+    const SAVED_LANGUAGE = localStorage.getItem("chosenLanguage") || "es";
+    LANGUAGE_SELECT.value = SAVED_LANGUAGE;
+    languages.changeLanguage(SAVED_LANGUAGE);
+    savedRolls.loadSavedRolls();
+})
 
 SAVE_BUTTON.addEventListener("click", (e) => 
 {
@@ -65,3 +72,5 @@ export function resetRoll()
     diceTrayDiv.innerHTML = "";
     diceCounter.updateDiceCounter();
 }
+
+LANGUAGE_SELECT.addEventListener("change", (event) => languages.changeLanguage(event.target.value));

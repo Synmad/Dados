@@ -1,4 +1,4 @@
-const TOGGLE_HISTORY = document.getElementById("toggle-history");
+const TOGGLE_HISTORY = document.getElementById("toggle-history-button");
 const HISTORY_SECTION = document.getElementById("history-section");
 const HISTORY_LIST = document.getElementById("history-list");
 

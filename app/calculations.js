@@ -4,7 +4,7 @@ import * as history from "./history.js"
 let breakdownText = "";
 let modifierText;
 let finalTotal = 0;
-const RESULT_DIV = document.getElementById("result");
+const RESULT_DIV = document.getElementById("result-div");
 const RESULT_BREAKDOWN_DIV = document.getElementById("result-breakdown");
 const RESULTS = [];
 
