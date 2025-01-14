@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,11 +9,10 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+        <h1>Dados</h1>
         <div id="tray">
         </div>
-        <div id="result-div" translatable="true">
-            <span id="result-placeholder-text">Seleccioná tus dados usando los botones de abajo. Cuando estés listo, seleccioná "Tirar".</span>
-        </div>
+        <div id="result">Seleccioná tus dados usando los botones de abajo.<br> Cuando estés listo, seleccioná "Tirar".</div>
         <div id="result-breakdown"></div>
         <hr>
         <div id="dice-counter"></div>
@@ -34,27 +33,21 @@
             <input type="text" autocomplete="off" id="modifier">
         </section>
         <section id="actions">
-            <button id="roll-button">Tirar</button>
-            <button id="reset-button">Reiniciar tirada</button>
-            <button id="save-button">Guardar tirada</button>
-            <button id="toggle-history-button">Cambiar visibilidad del historial</button>
+            <button id="roll">Tirar</button>
+            <button id="reset">Reiniciar tirada</button>
+            <button id="save">Guardar tirada</button>
         </section>
         <hr>
         <section id="saved-section">
-            <h2><span id="saved-header-text">Tiradas guardadas</span></h2>
+            <h2>Tiradas guardadas</h2>
         </section>
         <hr>
-        <section id="history-section">
-            <h2><span id="history-header-text">Historial</span></h2>
-            <ul id="history-list">
+        <section>
+            <h2>Historial</h2>
+            <ul id="history">
 
             </ul>
-        <hr>
         </section>
-            <select id="language-select">
-                <option value="en">English</option>
-                <option value="es">Español</option>
-            </select>
-        <script src="renderer.js" type="module"></script>
+        <script src="renderer.js"></script>
     </body>
 </html>
