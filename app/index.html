@@ -9,42 +9,73 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div id="tray">
-        </div>
-        <div id="result-div" translatable="true">
-            <span id="result-placeholder-text">Seleccioná tus dados usando los botones de abajo. Cuando estés listo, seleccioná "Tirar".</span>
-        </div>
-        <div id="result-breakdown"></div>
-        <hr>
-        <div id="dice-counter"></div>
-        <section id="dice">
-            <button id="d100" class="die">d100</button>
-            <button id="d20" class="die">d20</button>
-            <button id="d12" class="die">d12</button>
-            <button id="d10" class="die">d10</button>
-            <button id="d8" class="die">d8</button>
-            <button id="d6" class="die">d6</button>
-            <button id="d4" class="die">d4</button> 
-            <input type="text" autocomplete="off" id="modifier">
-        </section>
-        <section id="actions">
-            <button id="roll-button">Tirar</button>
-            <button id="reset-button">Reiniciar tirada</button>
-            <button id="save-button">Guardar tirada</button>
-            <button id="toggle-history-button">Cambiar visibilidad del historial</button>
-        </section>
-        <hr>
-        <section id="saved-section">
-            <h2><span id="saved-header-text">Tiradas guardadas</span></h2>
-        </section>
-        <hr>
-        <section id="history-section">
-            <h2><span id="history-header-text">Historial</span></h2>
-            <ul id="history-list">
-
-            </ul>
-        <hr>
-        </section>
+        <main>
+            <section id="results-section">
+                <div id="tray">
+                </div>
+                <section id="results-description-section">
+                    <span id="result-placeholder-text">Seleccioná tus dados usando los botones de abajo. Cuando estés listo, seleccioná "Tirar".</span>
+                    <div id="result-div" translatable="true">
+                    </div>
+                    <div id="result-breakdown"></div>
+                    <div id="dice-counter"></div>
+                </section>
+                <hr>
+            </section>
+            <section id="main-controls">
+                <section id="main-buttons">
+                    <section id="dice">
+                        <button id="d100" class="die">
+                            <img src="../assets/d100.png">
+                            <span>d100</span>
+                        </button>
+                        <button id="d20" class="die">
+                            <img src="../assets/d20.png">
+                            <span>d20</span>
+                        </button>
+                        <button id="d12" class="die">
+                            <img src="../assets/d12.png">
+                            <span>d12</span>
+                        </button>
+                        <button id="d10" class="die">
+                            <img src="../assets/d10.png">
+                            <span>d10</span>
+                        </button>
+                        <button id="d8" class="die">
+                            <img src="../assets/d8.png">
+                            <span>d8</span>
+                        </button>
+                        <button id="d6" class="die">
+                            <img src="../assets/d6.png">
+                            <span>d6</span>
+                        </button>
+                        <button id="d4" class="die">
+                            <img src="../assets/d4.png">
+                            <span>d4</span>
+                        </button>
+                        <button id="modifier-button">
+                            <img src="../assets/plus-svgrepo-com.svg">
+                            <input type="text" autocomplete="off" id="modifier-input" placeholder="0">
+                        </button>
+                    </section>
+                    <section id="actions">
+                        <button id="roll-button">Tirar</button>
+                        <button id="reset-button">Reiniciar tirada</button>
+                        <button id="save-button">Guardar tirada</button>
+                        <button id="toggle-history-button">Cambiar visibilidad del historial</button>
+                    </section>
+                </section>
+                <section id="saved-section">
+                    <h3 id="saved-header"><span id="saved-header-text">Tiradas guardadas</span></h3>
+                    <div id="saved-rolls-div"></div>
+                </section>
+                <section id="history-section">
+                    <h2><span id="history-header-text">Historial</span></h2>
+                    <ul id="history-list">
+        
+                    </ul>
+            </section>
+        </main>
             <select id="language-select">
                 <option value="en">English</option>
                 <option value="es">Español</option>

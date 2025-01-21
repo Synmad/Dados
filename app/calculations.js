@@ -1,9 +1,11 @@
 import * as renderer from "./renderer.js" 
 import * as history from "./history.js"
+import * as diceSelection from "./diceSelection.js"
 
 let breakdownText = "";
 let modifierText;
 let finalTotal = 0;
+const RESULT_PLACEHOLDER_TEXT = document.getElementById("result-placeholder-text");
 const RESULT_DIV = document.getElementById("result-div");
 const RESULT_BREAKDOWN_DIV = document.getElementById("result-breakdown");
 const RESULTS = [];
@@ -26,6 +28,13 @@ export function rollAllDice()
 
 export function calculateTotal()
 {
+    if(diceSelection.hasSelected)
+    {
+        RESULT_DIV.classList.remove("removed");
+        RESULT_PLACEHOLDER_TEXT.classList.add("removed");
+    }
+    else RESULT_DIV.classList.add("removed");
+
     RESULTS.length = 0;
     if (Number(renderer.MODIFIER_INPUT.value) > 0)
     {

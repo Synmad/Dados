@@ -44,7 +44,6 @@ export function changeLanguage(newLanguage)
         const ELEMENT = document.getElementById(key);
         if(ELEMENT)
         {
-            console.log("Translating " + ELEMENT.id);
             ELEMENT.innerHTML = value;
         }
     }

@@ -17,12 +17,12 @@ export function updateDiceCounter()
         const CHOSEN_LANGUAGE = languages.translations[localStorage.getItem("chosenLanguage")];
 
         if(diceSelection.selectedDice.length===0)
-            diceCounterDiv.innerText = "No estás por tirar ningún dado.";
+            diceCounterDiv.innerText = CHOSEN_LANGUAGE["dice-counter-empty"];
         else 
             {
                 const countsObjects = diceSelection.selectedDice.reduce((acc, die) => 
                 {
-                    acc[die.id] = (acc[die.id] || 0) + 1;
+                    /* THIS IS WHERE I GET THE "die is undefined" eror */acc[die.id] = (acc[die.id] || 0) + 1;
                     return acc;
                 }, {});
 
@@ -32,7 +32,6 @@ export function updateDiceCounter()
                     const sides = renderer.diceValues.find(die => die.id === id).sides;
                     return {id, count, sides};
                 })
-
                 countsString = countsArray
                     .sort((a, b) => b.sides - a.sides)
                     .map(({count, id}) =>

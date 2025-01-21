@@ -3,7 +3,7 @@ import * as diceSelection from "./diceSelection.js"
 import * as renderer from "./renderer.js"
 import * as calculations from "./calculations.js"
 
-const SAVED_SECTION = document.getElementById("saved-section");
+const SAVED_ROLLS_DIV = document.getElementById("saved-rolls-div");
 const SAVED_ROLLS = [];
 
 export function saveRoll(modifierValue)
@@ -61,11 +61,11 @@ function createSavedRollButton(rollData, displayName, checkForRepeats = true)
         });
 
     if(checkForRepeats)
-        SAVED_SECTION.querySelectorAll("button").forEach((existingButton) => 
+        SAVED_ROLLS_DIV.querySelectorAll("button").forEach((existingButton) => 
             {
                 if(existingButton.getAttribute("data-roll") === NEW_SAVED_ROLL.getAttribute("data-roll"))
                     existingButton.remove();
             })
 
-    SAVED_SECTION.appendChild(NEW_SAVED_ROLL);
+    SAVED_ROLLS_DIV.appendChild(NEW_SAVED_ROLL);
 }

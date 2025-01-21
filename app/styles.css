@@ -1,7 +1,6 @@
-body 
-{
-    display: flex;
-    flex-direction: column;
+@font-face {
+    font-family: 'Lato';
+    src: url(../assets/Lato-Regular.ttf);
 }
 
 @keyframes rotate360
@@ -13,6 +12,24 @@ body
 .rotate
 {
     animation: rotate360 0.4s ease-out 0s 1 normal none;
+}
+
+.hidden
+{
+    visibility: hidden !important;
+}
+
+.removed
+{
+    display: none !important;
+}
+
+body
+{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
 }
 
 #tray 
@@ -28,6 +45,7 @@ body
 
 .tray-die-button
 {
+    cursor: pointer;
     aspect-ratio: 1 / 1; 
     display: flex;
     justify-content: center; 
@@ -45,13 +63,202 @@ body
 
 .tray-die-button > span
 {
-    color: orange;
+    color: grey;
     font-size: 1.5rem;
     position: absolute;
     background-color: transparent;
 }
 
-.hidden
+#results-section
 {
-    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+#results-description-section
+{
+    display: flex;
+    flex-direction: column;
+    height: 18vh;
+    position: relative;
+    width: 100%;
+    justify-content: flex-end;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#result-div
+{
+    display: flex;
+    font-size: 8vh;
+}
+
+#result-placeholder-text
+{
+    font-size: 1rem;
+}
+
+#dice-counter
+{
+    font-size: 0.8rem;
+    color:#0d0e11;
+    font-style: italic;
+    margin-top: 0; 
+    bottom: 0;
+    left: 0;
+    box-sizing: content-box;
+    align-self: flex-start;
+    position: static;
+}
+
+main 
+{
+    flex: 0 0 100vh;
+}
+
+main > *
+{
+    margin: 0.5vw 0 0.5vw 0;
+}
+
+#main-controls
+{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content 1fr;
+    column-gap: 5%;
+    grid-template-areas: 
+    'main-buttons history'
+    'saved history';
+}
+
+h2
+{
+    font-size: 2rem;
+    font-weight: normal;
+    margin: 0 0 0.8% 0;
+}
+
+h3
+{
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 1%;
+    display: inline-block;
+}
+
+span, button, input
+{
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+span, button
+{
+    font-size: clamp(10px, 3vw, 90%)
+}
+
+#main-buttons
+{
+    grid-area: main-buttons;
+}
+
+#dice, #actions
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.die
+{
+    cursor: pointer;
+    box-shadow: 0 1px 3px 1px rgba(60,64,67,.15),0 1px 2px 0 rgba(60,64,67,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    height: 80px;
+    margin: 6px;
+    padding: 4px 16px;
+    border: none;
+    border-radius: 40px;
+}
+
+.die > img
+{
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+}
+
+.die > span
+{
+    display: flex;
+    align-items: center;
+    font-size: 36px;
+    justify-self: flex-start;
+}
+
+#saved-section 
+{
+    align-self: start;
+    grid-area: saved;
+    max-height: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: flex-start; 
+    text-align: center;
+    position: relative;
+}
+
+#history-section
+{
+    grid-area: history;
+}
+
+#modifier-button
+{
+    cursor: pointer;
+    box-shadow: 0 1px 3px 1px rgba(60,64,67,.15),0 1px 2px 0 rgba(60,64,67,.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+    height: 80px;
+    margin: 6px;
+    border: none;
+    border-radius: 40px;
+}
+
+#modifier-button > * 
+{
+    padding: 3px;
+}
+
+#modifier-button > img
+{
+    width: 35%;
+}
+
+#modifier-input
+{
+    width: 35%;
+    height: 80%;
+    font-size: 36px;
+    border: 1px solid transparent;
+    background-color: transparent;
+    outline: none;
+    color: inherit;
+    cursor: text;
+}
+
+#modifier-input:focus
+{
+    border: 1px solid #ccc;
+    background-color: white;
 }

@@ -1,9 +1,10 @@
 import * as renderer from "./renderer.js"
 import * as calculations from "./calculations.js"
+import * as diceSelection from "./diceSelection.js"
 
-export function addDiceToTray(event)
+export function addDiceToTray(button)
 {
-    const ROLL_DATA = JSON.parse(event.target.getAttribute("data-roll")) || null;
+    const ROLL_DATA = JSON.parse(button.getAttribute("data-roll")) || null;
     console.log(ROLL_DATA);
     if(ROLL_DATA !== null)
     {
@@ -17,7 +18,7 @@ export function addDiceToTray(event)
             });
     }
     else
-        initializeTrayDie(event.target.id);
+        initializeTrayDie(button.id);
 }
 
 function initializeTrayDie(id)
@@ -29,12 +30,13 @@ function initializeTrayDie(id)
     NEW_BUTTON.classList.add("tray-die-button");
     NEW_BUTTON.addEventListener("click", (e) => 
     {
-        renderer.rollDie(e);
+        calculations.rollDie(e);
         calculations.calculateTotal();
     })
     NEW_BUTTON.addEventListener("contextmenu", (e) => 
     {
         removeTrayDice(e);
+        diceSelection.removeSelectedDice(e.currentTarget);
         e.preventDefault();
     });
     NEW_BUTTON.addEventListener("animationend", (e) =>
@@ -55,9 +57,17 @@ function initializeTrayDie(id)
     calculations.calculateTotal();
 }
 
-function removeTrayDice(event)
+export function removeTrayDice(button)
 {
-    renderer.removeSelectedDice(event);
-    event.currentTarget.remove();
+    if(button.currentTarget)
+    {
+        button.currentTarget.remove();
+    }
+    else
+    {
+        const TRAY_DICE = document.querySelectorAll(".tray-die-button");
+        const DIE_TO_REMOVE = Array.from(TRAY_DICE).find((dice) => dice.id === button.id);
+        DIE_TO_REMOVE.remove();
+    }
     calculations.calculateTotal();
 }

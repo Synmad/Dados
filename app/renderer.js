@@ -3,6 +3,7 @@ import * as calculations from "./calculations.js"
 import * as diceSelection from "./diceSelection.js"
 import * as savedRolls from "./savedRolls.js"
 import * as languages from "./languages.js"
+import * as diceTray from "./diceTray.js"
 
 export const diceValues = 
 [
@@ -17,11 +18,14 @@ export const diceValues =
 const DICE_BUTTONS = document.querySelectorAll(".die");
 const ROLL_BUTTON = document.getElementById("roll-button");
 const RESET_BUTTON = document.getElementById("reset-button");
-export const MODIFIER_INPUT = document.getElementById("modifier");
+export const MODIFIER_INPUT = document.getElementById("modifier-input");
 export let modifierValue;
 export const diceTrayDiv = document.getElementById("tray");
 const SAVE_BUTTON = document.getElementById("save-button");
 const LANGUAGE_SELECT = document.getElementById("language-select");
+const MODIFIER_BUTTON = document.getElementById("modifier-button");
+
+calculations.rollAllDice();
 
 document.addEventListener("DOMContentLoaded", () =>
 {
@@ -34,6 +38,24 @@ document.addEventListener("DOMContentLoaded", () =>
 SAVE_BUTTON.addEventListener("click", (e) => 
 {
     savedRolls.saveRoll(modifierValue)
+})
+
+MODIFIER_BUTTON.addEventListener("click", (e) => 
+{
+    if(e.target.tagName !== "INPUT")
+    {
+        MODIFIER_INPUT.value = Number(MODIFIER_INPUT.value) + 1;
+        e.preventDefault();
+    }
+});
+
+MODIFIER_BUTTON.addEventListener("contextmenu", (e) => 
+{
+    if(e.target.tagName !== "INPUT")
+    {
+        MODIFIER_INPUT.value = Number(MODIFIER_INPUT.value) - 1;
+        e.preventDefault();
+    }
 })
 
 MODIFIER_INPUT.addEventListener("input", (e) => 
@@ -49,11 +71,13 @@ DICE_BUTTONS.forEach(button =>
     {
         button.addEventListener("click", (e) => 
             {
-                diceSelection.selectDice(e);
+                diceSelection.selectDice(e.currentTarget);
+                e.preventDefault();
             });
         button.addEventListener("contextmenu", (e) => 
             {
-                diceSelection.removeSelectedDice(e);
+                diceSelection.removeSelectedDice(e.currentTarget);
+                diceTray.removeTrayDice(e.currentTarget)
                 e.preventDefault();
             });
     });
